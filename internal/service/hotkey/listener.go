@@ -15,10 +15,14 @@ func ListenPushToTalk(onDown func() error, onUp func() error) error {
 
 	for {
 		<-hk.Keydown()
-		onDown()
+		if err := onDown(); err != nil {
+			fmt.Println("onDown error:", err)
+		}
 
 		<-hk.Keyup()
-		onUp()
+		if err := onUp(); err != nil {
+			fmt.Println("onUp error:", err)
+		}
 	}
 }
 
