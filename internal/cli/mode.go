@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -12,7 +13,12 @@ var modeCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		mode := args[0]
-		fmt.Println("mode:", mode)
+
+		if err := daemonStateRepo.SetMode(context.Background(), mode); err != nil {
+			return fmt.Errorf("cannot set mode: %w", err)
+		}
+
+		fmt.Println("mode set:", mode)
 		return nil
 	},
 }

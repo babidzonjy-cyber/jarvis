@@ -1,10 +1,12 @@
 package cli
 
 import (
+	"context"
 	"jarvis/internal/pipeline"
 	"jarvis/internal/service/audio"
 	"jarvis/internal/service/hotkey"
 	"log"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -29,6 +31,17 @@ var startCmd = &cobra.Command{
 		if err := hotkey.ListenPushToTalk(p.OnDown, p.OnUp); err != nil {
 			log.Printf("cannot listen: %v", err)
 		}
+
+		go func() {
+			ticker := time.NewTicker(5 * time.Second)
+			defer ticker.Stop()
+
+			for range ticker.C {
+				if err := daemonStateRepo.Heartbeat(context.Background()); err != nil {
+					log.Printf("heartbeat failed: %v\n", err)
+				}
+			}
+		}()
 
 		return nil
 	},
