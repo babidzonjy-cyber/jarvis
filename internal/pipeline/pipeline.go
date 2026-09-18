@@ -3,6 +3,7 @@ package pipeline
 import (
 	"fmt"
 	"jarvis/internal/service/audio"
+	llm "jarvis/internal/service/llm/generate"
 	"jarvis/internal/service/transcribe"
 	"os"
 )
@@ -14,7 +15,6 @@ type Pipeline struct {
 
 func (p *Pipeline) OnDown() error {
 	fmt.Println("[LISTENING]")
-	fmt.Println()
 
 	if err := p.Recorder.Start(p.WavPath); err != nil {
 		return fmt.Errorf("keyDown error: %w", err)
@@ -31,12 +31,22 @@ func (p *Pipeline) OnUp() error {
 		return fmt.Errorf("keyUp error: %w", err)
 	}
 
-	data, err := transcribe.Transcribe(p.WavPath)
+	systemPrompt := "Голосовой помощник, разговор на русском языке."
+
+	prompt, err := transcribe.Transcribe(p.WavPath, systemPrompt)
 	if err != nil {
 		return fmt.Errorf("cannot transcribe: %w", err)
 	}
 
-	fmt.Println(string(data))
+	fmt.Println("Ваш текст:", prompt)
+
+	answer, err := llm.Ask(prompt, systemPrompt)
+	if err != nil {
+		return fmt.Errorf("llm cannot ask: %w", err)
+	}
+
+	fmt.Println("Ответ нейросети:", answer)
+	fmt.Println()
 
 	return nil
 }
