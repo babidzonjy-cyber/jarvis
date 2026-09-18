@@ -19,10 +19,11 @@ var statusCmd = &cobra.Command{
 		state, err := daemonStateRepo.GetState(context.Background())
 		if err != nil {
 			log.Printf("cannot get state: %v", err)
+			return fmt.Errorf("cannot get state: %w", err)
 		}
 
 		if time.Since(state.UpdatedAt) > heartbeatTimeout {
-			fmt.Printf("Демон сейчас не запущен, последний запущенный режим был: %q\n", state.Mode)
+			fmt.Printf("Демон сейчас не запущен, последний запущенный режим был: %q, %q\n", state.Mode, state.UpdatedAt)
 		} else {
 			fmt.Printf("Демон работает, режим: %q\n", state.Mode)
 		}

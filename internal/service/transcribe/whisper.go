@@ -20,8 +20,8 @@ func Transcribe(wavPath, initialPrompt string) (string, error) {
 		"--initial_prompt", initialPrompt,
 	)
 
-	cmd.Stderr = os.Stderr
-	cmd.Stdout = os.Stdout
+	// cmd.Stderr = os.Stderr
+	// cmd.Stdout = os.Stdout
 
 	if err := cmd.Run(); err != nil {
 		return "", fmt.Errorf("transcribe failed: %w", err)

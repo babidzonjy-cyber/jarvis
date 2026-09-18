@@ -3,7 +3,7 @@ package pipeline
 import (
 	"fmt"
 	"jarvis/internal/service/audio"
-	"jarvis/internal/service/llm"
+	llm "jarvis/internal/service/llm/generate"
 	"jarvis/internal/service/transcribe"
 	"os"
 )
@@ -15,7 +15,6 @@ type Pipeline struct {
 
 func (p *Pipeline) OnDown() error {
 	fmt.Println("[LISTENING]")
-	fmt.Println()
 
 	if err := p.Recorder.Start(p.WavPath); err != nil {
 		return fmt.Errorf("keyDown error: %w", err)
@@ -47,6 +46,7 @@ func (p *Pipeline) OnUp() error {
 	}
 
 	fmt.Println("Ответ нейросети:", answer)
+	fmt.Println()
 
 	return nil
 }

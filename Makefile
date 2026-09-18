@@ -10,8 +10,8 @@ run-jarvis-fast:
 build-jarvis:
 	@go build -ldflags="-extldflags=-Wl,-no_warn_duplicate_libraries" -o jarvis ./cmd/main.go
 
-run-jarvis:
-	./jarvis
+run-jarvis-start:
+	./jarvis start
 
 docker-build:
 	@docker compose build
