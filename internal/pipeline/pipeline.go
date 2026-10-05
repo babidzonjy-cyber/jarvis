@@ -3,7 +3,7 @@ package pipeline
 import (
 	"fmt"
 	"jarvis/internal/service/audio"
-	llm "jarvis/internal/service/llm/generate"
+	llm "jarvis/internal/service/llm"
 	"jarvis/internal/service/transcribe"
 	"os"
 )
@@ -38,15 +38,21 @@ func (p *Pipeline) OnUp() error {
 		return fmt.Errorf("cannot transcribe: %w", err)
 	}
 
-	fmt.Println("Ваш текст:", prompt)
-
-	answer, err := llm.Ask(prompt, systemPrompt)
+	answer, err := llm.Process(prompt)
 	if err != nil {
-		return fmt.Errorf("llm cannot ask: %w", err)
+		return fmt.Errorf("cannot process: %w", err)
 	}
 
+	fmt.Println("Ваш текст:", prompt)
 	fmt.Println("Ответ нейросети:", answer)
-	fmt.Println()
+
+	// answer, err := llm.Ask(prompt, systemPrompt)
+	// if err != nil {
+	// 	return fmt.Errorf("llm cannot ask: %w", err)
+	// }
+
+	// fmt.Println("Ответ нейросети:", answer)
+	// fmt.Println()
 
 	return nil
 }

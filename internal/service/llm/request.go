@@ -1,16 +1,18 @@
 package llm
 
 type RequestLLMToolCalling struct {
-	Model    string    `json:"model"`
-	Messages []Message `json:"messages"`
-	Stream   bool      `json:"stream"`
-	Tools    []Tool    `json:"tools"`
+	Model    string         `json:"model"`
+	Messages []Message      `json:"messages"`
+	Stream   bool           `json:"stream"`
+	Tools    []Tool         `json:"tools,omitempty"`
+	Options  map[string]any `json:"options,omitempty"`
 }
 
 type Message struct {
 	Role      string     `json:"role"`
 	Content   string     `json:"content"`
 	ToolCalls []ToolCall `json:"tool_calls,omitempty"`
+	Images    []string   `json:"images,omitempty"`
 }
 
 type Tool struct {
