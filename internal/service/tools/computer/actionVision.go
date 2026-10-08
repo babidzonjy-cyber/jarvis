@@ -7,13 +7,13 @@ import (
 )
 
 type Action struct {
-	Type string
-	X    int
-	Y    int
-	Text string
+	Type string `json:"type"`
+	X    int    `json:"x"`
+	Y    int    `json:"y"`
+	Text string `json:"text"`
 }
 
-func ExecuteAction(action Action) error {
+func ExecuteActionVision(action Action) error {
 	switch action.Type {
 	case "move":
 		mouse.MoveMouse(action.X, action.Y)

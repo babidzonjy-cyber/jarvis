@@ -22,6 +22,7 @@ func AskWithTools(prompt string) (string, error) {
 			getWeatherTool,
 			searchWebTool,
 			searchYoutubeTool,
+			openProject,
 		},
 	}
 
@@ -102,6 +103,32 @@ func AskWithTools(prompt string) (string, error) {
 			res, err = tools.SearchYoutube(query)
 			if err != nil {
 				return "", fmt.Errorf("search youtube: %w", err)
+			}
+
+		case "open_project":
+			projectName, ok := toolCall.Function.Arguments["project_name"].(string)
+			if !ok {
+				return "", fmt.Errorf("open project: project_name must be a string: %w", err)
+			}
+
+			ide, ok := toolCall.Function.Arguments["ide"].(string)
+			if !ok {
+				return "", fmt.Errorf("open project: ide must be a string: %w", err)
+			}
+
+			switch ide {
+			case "vscode":
+				res, err = tools.OpenProjectVsCode(projectName)
+			case "zed":
+				res, err = tools.OpenProjectZed(projectName)
+			case "nvim":
+				res, err = tools.OpenProjectNvim(projectName)
+			default:
+				return "", fmt.Errorf("unknown IDE: %s", ide)
+			}
+
+			if err != nil {
+				return "", fmt.Errorf("open project %s: %w", ide, err)
 			}
 
 		default:

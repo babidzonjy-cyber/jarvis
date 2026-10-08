@@ -6,6 +6,7 @@ type RequestLLMToolCalling struct {
 	Stream   bool           `json:"stream"`
 	Tools    []Tool         `json:"tools,omitempty"`
 	Options  map[string]any `json:"options,omitempty"`
+	Format   any            `json:"format,omitempty"`
 }
 
 type Message struct {
@@ -33,6 +34,7 @@ type Parameters struct {
 }
 
 type Property struct {
-	Type        string `json:"type"`
-	Description string `json:"description"`
+	Type        string   `json:"type"`
+	Description string   `json:"description"`
+	Enum        []string `json:"enum"`
 }

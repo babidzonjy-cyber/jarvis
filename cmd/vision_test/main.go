@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"jarvis/internal/service/llm"
+	"jarvis/internal/service/tools/computer"
 	"jarvis/internal/service/tools/computer/screen"
 	"log"
 	"os"
@@ -33,10 +32,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	answer, err := llm.AskVision("Что находится на этой картинке? Опиши кратко", path)
-	if err != nil {
-		panic(err)
+	task := "Найди файл pipeline.go и верни координаты его центра. и кликни по нему"
+	if err := computer.RunVisionAction(task, path); err != nil {
+		log.Fatal(err)
 	}
-
-	fmt.Println(answer)
 }

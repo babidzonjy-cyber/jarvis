@@ -87,3 +87,26 @@ var searchYoutubeTool = Tool{
 		},
 	},
 }
+
+var openProject = Tool{
+	Type: "function",
+	Function: Function{
+		Name:        "open_project",
+		Description: "открывает через терминал нужную мне директорию в IDE",
+		Parameters: Parameters{
+			Type: "object",
+			Properties: map[string]Property{
+				"project_name": {
+					Type:        "string",
+					Description: "Название диреткории, в которую я хочу попасть",
+				},
+				"ide": {
+					Type:        "string",
+					Description: "IDE в которой я хочу открыть проект",
+					Enum:        []string{"zed", "vscode", "nvim"},
+				},
+			},
+			Required: []string{"project_name", "ide"},
+		},
+	},
+}

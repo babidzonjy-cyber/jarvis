@@ -12,6 +12,7 @@ func wrapper(req RequestLLMToolCalling) (ResponseLLMToolCalling, error) {
 	if err != nil {
 		return ResponseLLMToolCalling{}, fmt.Errorf("cannot marshal data: %w", err)
 	}
+	fmt.Println(req.Model, req.Messages[0].Content)
 
 	body := bytes.NewReader(data)
 
