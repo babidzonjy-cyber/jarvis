@@ -1,14 +1,17 @@
 include .env
 export
 
+run-test-jarvis-fast:
+	@go run ./cmd/vision_test
+
 check-micro:
 	ffmpeg -f avfoundation -list_devices true -i ""
 
 run-jarvis-fast:
-	@go run -ldflags="-extldflags=-Wl,-no_warn_duplicate_libraries" main.go
+	@go run main.go
 
 build-jarvis:
-	@go build -ldflags="-extldflags=-Wl,-no_warn_duplicate_libraries" -o jarvis ./cmd/main.go
+	@go build -o jarvis ./cmd/main.go
 
 run-jarvis-start:
 	./jarvis start
