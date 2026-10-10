@@ -14,9 +14,20 @@ var projects = map[string]bool{
 	"study":    true,
 }
 
-func openProject(projectName string) (string, error) {
+var ideCommands = map[string][]string{
+	"vscode": {"open", "-a", "Visual Studio Code"},
+	"zed":    {"open", "-a", "Zed"},
+	"cursor": {"open", "-a", "Cursor"},
+}
+
+func OpenProject(projectName, ideName string) (string, error) {
 	if !projects[projectName] {
 		return "", fmt.Errorf("project %q is not allowed", projectName)
+	}
+
+	ide, ok := ideCommands[ideName]
+	if !ok {
+		return "", fmt.Errorf("unknown ide: %s", ideName)
 	}
 
 	home, err := os.UserHomeDir()
@@ -26,32 +37,15 @@ func openProject(projectName string) (string, error) {
 
 	path := filepath.Join(home, "dev", projectName)
 
-	return path, nil
-}
-
-func OpenProjectZed(projectName string) (string, error) {
-	path, err := openProject(projectName)
+	_, err = os.Stat(path)
 	if err != nil {
-		return "", fmt.Errorf("open project: %w", err)
+		return "", fmt.Errorf("file stat: %w", err)
 	}
 
-	return "Successfuly opened", exec.Command("zed", path).Run()
-}
-
-func OpenProjectVsCode(projectName string) (string, error) {
-	path, err := openProject(projectName)
-	if err != nil {
-		return "", fmt.Errorf("open project: %w", err)
+	cmd := exec.Command(ide[0], ide[1], ide[2], path)
+	if err := cmd.Run(); err != nil {
+		return "", fmt.Errorf("cannot run command: %w, ide: %s", err, ide[2])
 	}
 
-	return "Successfuly opened", exec.Command("code", path).Run()
-}
-
-func OpenProjectNvim(projectName string) (string, error) {
-	path, err := openProject(projectName)
-	if err != nil {
-		return "", fmt.Errorf("open project: %w", err)
-	}
-
-	return "Successfuly opened", exec.Command("nvim", path).Run()
+	return "Successfuly opened", nil
 }

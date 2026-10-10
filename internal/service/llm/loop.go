@@ -116,16 +116,7 @@ func AskWithTools(prompt string) (string, error) {
 				return "", fmt.Errorf("open project: ide must be a string: %w", err)
 			}
 
-			switch ide {
-			case "vscode":
-				res, err = tools.OpenProjectVsCode(projectName)
-			case "zed":
-				res, err = tools.OpenProjectZed(projectName)
-			case "nvim":
-				res, err = tools.OpenProjectNvim(projectName)
-			default:
-				return "", fmt.Errorf("unknown IDE: %s", ide)
-			}
+			res, err = tools.OpenProject(projectName, ide)
 
 			if err != nil {
 				return "", fmt.Errorf("open project %s: %w", ide, err)
